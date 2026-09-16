@@ -1,6 +1,7 @@
 import { FaUsers, FaSuitcaseRolling, FaCheck, FaPhone } from "react-icons/fa6";
 import SectionHeading from "../common/SectionHeading";
 import Button from "../common/Button";
+import VehicleIllustration from "../common/VehicleIllustration";
 import { fleet } from "../../data/fleet";
 import { siteConfig } from "../../data/siteConfig";
 
@@ -40,14 +41,24 @@ export default function Fleet() {
               key={vehicle.id}
               className="group overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-ink-900/10"
             >
-              {/* ---- IMAGE AREA ---- */}
+              {/* ---- IMAGE AREA ----
+                  Conditional rendering: agar client ki asli photo hai to wo
+                  dikhao, warna us gaadi ke TYPE ka illustration.
+                  Isse naam aur tasveer kabhi mismatch nahi hote. */}
               <div className="relative aspect-[4/3] overflow-hidden bg-ink-900/5">
-                <img
-                  src={vehicle.image}
-                  alt={`${vehicle.name} - ${vehicle.category} booking Delhi`}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                {vehicle.image ? (
+                  <img
+                    src={vehicle.image}
+                    alt={`${vehicle.name} - ${vehicle.category} booking Delhi`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <VehicleIllustration
+                    type={vehicle.type}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
 
                 {/* Category chip - upar baayein */}
                 <span className="absolute left-4 top-4 rounded-full bg-ink-900/85 px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-brand-500 backdrop-blur-sm">
