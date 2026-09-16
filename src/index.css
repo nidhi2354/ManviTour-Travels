@@ -1,0 +1,93 @@
+/* ============================================================
+   GLOBAL STYLESHEET — Manvi Tour & Travels
+   Tailwind v4: yahan hi theme define hota hai (tailwind.config.js nahi)
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* ---------- 1. BRAND THEME TOKENS ----------
+   @theme ke andar jo variable banate hain, Tailwind usse automatically
+   utility class bana deta hai.  e.g. --color-brand-500  ->  bg-brand-500,
+   text-brand-500, border-brand-500 ...
+   Colors client ke visiting card se liye gaye hain (peela + kaala).
+------------------------------------------------ */
+@theme {
+  /* Primary — card ka signature peela */
+  --color-brand-50:  #FFFBEB;
+  --color-brand-100: #FFF3C4;
+  --color-brand-200: #FFE68A;
+  --color-brand-300: #FFD84D;
+  --color-brand-400: #FFCC1F;
+  --color-brand-500: #FFC61A;   /* MAIN BRAND YELLOW */
+  --color-brand-600: #E0A800;
+  --color-brand-700: #B88600;
+
+  /* Secondary — card ka kaala background */
+  --color-ink-700: #2B2B2B;
+  --color-ink-800: #1A1A1A;
+  --color-ink-900: #0D0D0D;     /* MAIN BRAND BLACK */
+
+  /* Sunset orange — logo ke suraj se */
+  --color-sun-400: #FBBF5B;
+  --color-sun-500: #F5A623;
+
+  /* Fonts */
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Custom animation — hero ke liye */
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+/* ---------- 2. BASE RESETS ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;   /* navbar link click -> smooth scroll */
+    scroll-padding-top: 90px;  /* sticky navbar section ko chhupa na de */
+  }
+
+  body {
+    @apply bg-white text-ink-800 font-body antialiased;
+
+    /* FIX: mobile drawer band hone par translate-x-full se screen ke
+       daayein bahar "park" ho jaata hai. Viewport ke bahar khada fixed
+       element page ko sideways scrollable bana deta hai - aur daayein
+       scroll karte hi wo parked drawer dikhne lagta hai (lagta hai
+       menu apne aap khul gaya).
+
+       `overflow-x: clip` us sideways scroll ko khatam kar deta hai.
+       `clip` kyun, `hidden` kyun nahi? `hidden` body ko scroll container
+       bana deta hai, jisse `sticky` navbar TOOT jaata hai. `clip` nahi banata. */
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-bold text-ink-900;
+  }
+}
+
+/* ---------- 3. REUSABLE COMPONENT CLASSES ----------
+   Baar baar wahi lambi Tailwind chain likhne se bachne ke liye.
+------------------------------------------------ */
+@layer components {
+  /* Har section ka standard horizontal padding + max width */
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section ke upar-neeche ka vertical space */
+  .section-y {
+    @apply py-16 md:py-24;
+  }
+}
+
+/* ---------- 4. CUSTOM SCROLLBAR (chhota polish) ---------- */
+::-webkit-scrollbar        { width: 10px; }
+::-webkit-scrollbar-track  { background: #F4F4F5; }
+::-webkit-scrollbar-thumb  { background: var(--color-brand-500); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand-600); }

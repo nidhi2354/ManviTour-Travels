@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFC61A" />
+
+    <!-- ============================================================
+         SEO META TAGS
+         PURPOSE: how this page appears on Google. The <title> and
+         <description> are what a customer actually sees in results.
+
+         Keywords are chosen deliberately: "Dwarka", "Delhi",
+         "taxi service", "tempo traveller" - for local search.
+         ============================================================ -->
+    <title>
+      Manvi Tour &amp; Travels &ndash; Taxi, Tempo Traveller &amp; Tour Packages
+      in Delhi NCR
+    </title>
+
+    <meta
+      name="description"
+      content="Manvi Tour & Travels, Dwarka Delhi - airport pick & drop, outstation taxi, tempo traveller, luxury car & bus booking and India tour packages. GST registered, 24x7 service. Call +91 9289360999"
+    />
+
+    <meta
+      name="keywords"
+      content="taxi service dwarka, tempo traveller delhi, airport pick and drop delhi, outstation cab delhi, tour packages from delhi, luxury car rental delhi, bus booking delhi"
+    />
+
+    <meta name="author" content="Manvi Tour & Travels" />
+    <link rel="canonical" href="https://www.manvitravels.com/" />
+
+    <!-- ============================================================
+         OPEN GRAPH TAGS
+         PURPOSE: when someone shares the link on WhatsApp or Facebook,
+         a preview card with the title, description and image is shown.
+         Travel links get shared a lot, so this matters.
+
+         TODO: create a 1200x630 px banner and place it at
+         public/og-banner.jpg
+         ============================================================ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Manvi Tour & Travels" />
+    <meta
+      property="og:title"
+      content="Manvi Tour & Travels - Delhi NCR's Most Trusted Taxi & Tour Service"
+    />
+    <meta
+      property="og:description"
+      content="Airport transfer, outstation taxi, tempo travellers and tour packages. Verified drivers, fixed rates, 24x7 available."
+    />
+    <meta property="og:url" content="https://www.manvitravels.com/" />
+    <meta property="og:image" content="/og-banner.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon - the small logo shown on the browser tab -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- ============================================================
+         GOOGLE FONTS
+         Poppins = headings (bold, modern, grabs attention)
+         Inter   = body text (stays readable at small sizes)
+
+         The preconnect tags load the fonts ~100ms earlier.
+         display=swap => text stays visible while the font loads
+         instead of going blank.
+         ============================================================ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ============================================================
+         LOCAL BUSINESS STRUCTURED DATA (JSON-LD)
+         PURPOSE: gives Google the business details in a machine
+         readable format, so the business can appear as a card in
+         Google Maps and the knowledge panel - the biggest win in
+         local SEO. Data taken from the GST certificate and visiting card.
+         ============================================================ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "Manvi Tour & Travels",
+        "image": "https://www.manvitravels.com/og-banner.jpg",
+        "telephone": "+919289360999",
+        "email": "info@manvitravels.com",
+        "url": "https://www.manvitravels.com/",
+        "priceRange": "$$",
+        "openingHours": "Mo-Su 00:00-23:59",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Shop No. 5, C-76, Ground Floor, Block C/1, Mahavir Vihar",
+          "addressLocality": "Dwarka, New Delhi",
+          "addressRegion": "Delhi",
+          "postalCode": "110045",
+          "addressCountry": "IN"
+        },
+        "areaServed": "Delhi NCR"
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

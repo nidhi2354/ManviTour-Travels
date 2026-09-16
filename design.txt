@@ -1,0 +1,24 @@
+#	Section	Purpose 
+
+1	Top Bar	Phone/GST/timing — instant trust
+
+2	Navbar	Navigation + "Book Now" CTA
+
+3	Hero	Pehli nazar me business samajh aaye + enquiry form
+
+4	Services	Card ke 7 services
+5	Fleet	Gaadiyan + seating + rate/km
+
+6	Tour Packages	Delhi se popular routes
+
+7	Why Choose Us	Objection handling
+
+8	How It Works	3-step booking process
+
+9	Testimonials	Social proof
+
+10	CTA Banner	Call karne ka push
+
+11	Contact	Form + address + map
+
+12	Footer	GSTIN, legal info, links
