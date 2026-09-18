@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaUsers, FaSuitcaseRolling, FaCheck, FaPhone } from "react-icons/fa6";
 import SectionHeading from "../common/SectionHeading";
 import Button from "../common/Button";
@@ -24,6 +25,41 @@ import { siteConfig } from "../../data/siteConfig";
    RATES SAMPLE HAIN - client se confirm karke fleet.js me update karein.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   <VehiclePhoto /> - gaadi ki photo, ek safety net ke saath
+
+   TEEN SOORAT ho sakti hain:
+     1. photo hai aur load ho gayi      -> asli photo dikhegi
+     2. fleet.js me image null hai      -> illustration dikhega
+     3. photo di gayi par file missing  -> onError chalta hai,
+        failed = true hota hai, aur illustration dikh jaata hai
+
+   Teesri soorat hi asli faayda hai. Client agar 6 me se 4 hi
+   photos de, ya galat naam se file daale, to customer ko toota
+   hua image icon kabhi nahi dikhega - site professional rahegi.
+   ------------------------------------------------------------ */
+function VehiclePhoto({ vehicle }) {
+  const [failed, setFailed] = useState(false);
+
+  /* dono cases me classes same hain - isliye ek hi jagah likhi hain */
+  const mediaClass =
+    "h-full w-full object-cover transition-transform duration-500 group-hover:scale-105";
+
+  if (!vehicle.image || failed) {
+    return <VehicleIllustration type={vehicle.type} className={mediaClass} />;
+  }
+
+  return (
+    <img
+      src={vehicle.image}
+      alt={`${vehicle.name} - ${vehicle.category} booking in Delhi NCR`}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className={mediaClass}
+    />
+  );
+}
+
 export default function Fleet() {
   return (
     <section id="fleet" className="section-y bg-white">
@@ -34,31 +70,31 @@ export default function Fleet() {
           subtitle="From a compact sedan to a 45 seater luxury coach. Every vehicle reaches you only after regular servicing and full sanitisation."
         />
 
-        {/* ---------- FLEET GRID ---------- */}
-        <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        {/* ---- FLEET GRID ----
+            LAYOUT: upar 4 gaadiyan, neeche 3 (total 7).
+
+            grid ki jagah flex-wrap kyun?
+            grid har row ko BAAYEIN se bharta hai. 7 cards me neeche
+            wali 3 baayein sarak jaati aur daayein khaali jagah bachti -
+            row adhoori lagti. flex + justify-center me neeche wali 3
+            apne aap BEECH me aa jaati hain, layout santulit dikhta hai.
+
+            w-[calc(...)] : gap ka hissa har card se ghata diya hai,
+            warna cards ek row me fit nahi hote.
+              2 column -> 1 gap  (1.75rem)  / 2 cards = 0.875rem
+              4 column -> 3 gaps (5.25rem)  / 4 cards = 1.3125rem  */}
+        <div className="mt-14 flex flex-wrap justify-center gap-7">
           {fleet.map((vehicle) => (
             <article
               key={vehicle.id}
-              className="group overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-ink-900/10"
+              className="group w-full overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-ink-900/10 sm:w-[calc(50%-0.875rem)] lg:w-[calc(25%-1.3125rem)]"
             >
               {/* ---- IMAGE AREA ----
-                  Conditional rendering: agar client ki asli photo hai to wo
-                  dikhao, warna us gaadi ke TYPE ka illustration.
-                  Isse naam aur tasveer kabhi mismatch nahi hote. */}
+                  Photo ya illustration - faisla <VehiclePhoto /> karta hai
+                  (upar define kiya hai). Isse naam aur tasveer kabhi
+                  mismatch nahi hote. */}
               <div className="relative aspect-[4/3] overflow-hidden bg-ink-900/5">
-                {vehicle.image ? (
-                  <img
-                    src={vehicle.image}
-                    alt={`${vehicle.name} - ${vehicle.category} booking Delhi`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <VehicleIllustration
-                    type={vehicle.type}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                )}
+                <VehiclePhoto vehicle={vehicle} />
 
                 {/* Category chip - upar baayein */}
                 <span className="absolute left-4 top-4 rounded-full bg-ink-900/85 px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-brand-500 backdrop-blur-sm">

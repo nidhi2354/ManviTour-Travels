@@ -74,7 +74,6 @@ export const navLinks = [
   { id: 1, label: "Home",     href: "#home" },
   { id: 2, label: "Services", href: "#services" },
   { id: 3, label: "Fleet",    href: "#fleet" },
-  { id: 4, label: "Packages", href: "#packages" },
-  { id: 5, label: "Why Us",   href: "#why-us" },
-  { id: 6, label: "Contact",  href: "#contact" },
+  { id: 4, label: "Why Us",   href: "#why-us" },
+  { id: 5, label: "Contact",  href: "#contact" },
 ];

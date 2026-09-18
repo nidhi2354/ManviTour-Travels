@@ -112,8 +112,8 @@ export default function VehicleIllustration({ type = "sedan", className = "" }) 
       <defs>
         {/* Background ka halka peela gradient */}
         <linearGradient id={`bg-${type}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FFF3C4" />
-          <stop offset="100%" stopColor="#FFE68A" />
+          <stop offset="0%" stopColor="#FDEBCF" />
+          <stop offset="100%" stopColor="#FAD79F" />
         </linearGradient>
       </defs>
 
@@ -138,7 +138,7 @@ export default function VehicleIllustration({ type = "sedan", className = "" }) 
       <path d={shape.body} fill={bodyColor} />
 
       {/* 6. Windows - map() se, kyunki har type me alag count hai */}
-      <g fill="#FFC61A" opacity="0.9">
+      <g fill="#F5A623" opacity="0.9">
         {shape.windows.map((d, i) => (
           <path key={i} d={d} />
         ))}
@@ -153,7 +153,7 @@ export default function VehicleIllustration({ type = "sedan", className = "" }) 
       {shape.wheels.map((cx) => (
         <g key={cx}>
           <circle cx={cx} cy="180" r="27" fill="#0D0D0D" />
-          <circle cx={cx} cy="180" r="12" fill="#FFC61A" />
+          <circle cx={cx} cy="180" r="12" fill="#F5A623" />
           <circle cx={cx} cy="180" r="5" fill="#0D0D0D" />
         </g>
       ))}

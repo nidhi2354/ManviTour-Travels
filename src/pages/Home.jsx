@@ -1,7 +1,6 @@
 import Hero from "../components/home/Hero";
 import Services from "../components/home/Services";
 import Fleet from "../components/home/Fleet";
-import Packages from "../components/home/Packages";
 import WhyChooseUs from "../components/home/WhyChooseUs";
 import HowItWorks from "../components/home/HowItWorks";
 import Testimonials from "../components/home/Testimonials";
@@ -23,7 +22,7 @@ import Contact from "../components/home/Contact";
      1. Hero         -> ATTENTION : "ye kaun hain, kya karte hain"
      2. Services     -> INTEREST  : "mera kaam ye karte hain ya nahi"
      3. Fleet        -> EVALUATION: "gaadi kaisi, rate kitna"
-     4. Packages     -> DESIRE    : "arey Agra ka package accha hai!"
+     -- Packages section client ke kehne par hataya gaya hai --
      5. WhyChooseUs  -> OBJECTION : "par bharosa karun kaise?"
      6. HowItWorks   -> CLARITY   : "book karna aasaan hai"
      7. Testimonials -> PROOF     : "auron ka experience accha raha"
@@ -40,7 +39,6 @@ export default function Home() {
       <Hero />
       <Services />
       <Fleet />
-      <Packages />
       <WhyChooseUs />
       <HowItWorks />
       <Testimonials />

@@ -9,25 +9,34 @@
    @theme ke andar jo variable banate hain, Tailwind usse automatically
    utility class bana deta hai.  e.g. --color-brand-500  ->  bg-brand-500,
    text-brand-500, border-brand-500 ...
-   Colors client ke visiting card se liye gaye hain (peela + kaala).
+   Colors LOGO se liye gaye hain (golden + kaala).
+
+   PEHLE yahan chamakdaar peela (#FFC61A) tha. Lekin logo ke suraj,
+   pahiyon aur sadak ka rang #F5A623 hai - golden/amber. Do alag
+   peele saath me sasta lagte the. Ab poori site logo wale EK hi
+   golden par chalti hai, isliye brand ek jaisa dikhta hai.
 ------------------------------------------------ */
 @theme {
-  /* Primary — card ka signature peela */
-  --color-brand-50:  #FFFBEB;
-  --color-brand-100: #FFF3C4;
-  --color-brand-200: #FFE68A;
-  --color-brand-300: #FFD84D;
-  --color-brand-400: #FFCC1F;
-  --color-brand-500: #FFC61A;   /* MAIN BRAND YELLOW */
-  --color-brand-600: #E0A800;
-  --color-brand-700: #B88600;
+  /* Primary — logo ka golden. 500 hi asli brand colour hai,
+     baaki shades usi se bani hain (halki tints upar, gehri neeche). */
+  --color-brand-50:  #FEF7EC;
+  --color-brand-100: #FDEBCF;
+  --color-brand-200: #FAD79F;
+  --color-brand-300: #F8C36E;
+  --color-brand-400: #F6B444;
+  --color-brand-500: #F5A623;   /* MAIN BRAND GOLDEN - logo se */
+  --color-brand-600: #D18A0F;   /* hover / icons */
+  --color-brand-700: #8F5A06;   /* halke background par TEXT ke liye -
+                                   itna gehra rakha hai ki 4.9:1 contrast
+                                   mile, yaani chhota text bhi saaf padhe */
 
   /* Secondary — card ka kaala background */
   --color-ink-700: #2B2B2B;
   --color-ink-800: #1A1A1A;
   --color-ink-900: #0D0D0D;     /* MAIN BRAND BLACK */
 
-  /* Sunset orange — logo ke suraj se */
+  /* Sunset orange — hero ke peeche wale halke glow ke liye.
+     sun-500 ab brand-500 jaisa hi hai (dono logo se aaye hain). */
   --color-sun-400: #FBBF5B;
   --color-sun-500: #F5A623;
 
