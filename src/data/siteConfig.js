@@ -57,6 +57,17 @@ export const siteConfig = {
   mapEmbedUrl:
     "https://www.google.com/maps?q=Mahavir+Vihar+Dwarka+Sector+1+New+Delhi+110045&output=embed",
 
+  /* "Get directions" button ka link. Embed wale map se ALAG hai:
+     embed sirf DIKHATA hai, ye customer ke phone ka Google Maps
+     app khol kar uske current location se RAASTA bana deta hai.
+     Map dekhne aur map par chalne me yahi fark hai.
+
+     ⚠️ TODO: client ka Google Business listing ban jaaye to isse
+     uske asli place ID wale link se badal dena - tab pin bilkul
+     dukaan par girega, ilaake ke beech me nahi. */
+  mapDirectionsUrl:
+    "https://www.google.com/maps/dir/?api=1&destination=Mahavir+Vihar+Dwarka+Sector+1+New+Delhi+110045",
+
   // ---- Social links (client se accounts maang kar update karna) ----
   socials: {
     facebook: "#",
@@ -67,13 +78,26 @@ export const siteConfig = {
 
 /* ============================================================
    NAVBAR LINKS
-   href me "#id" hai kyunki abhi single page hai (smooth scroll).
-   Jab alag pages banenge to inhe "/services" jaise route me badal dena.
+
+   Ab site MULTI-PAGE hai, isliye yahan "#services" jaise hash nahi
+   balki asli ROUTE path (`to`) likhe hain. React Router inhi paths
+   ko src/routes/AppRoutes.jsx me page se jodta hai.
+
+   YE EK HI ARRAY 2 JAGAH CHALTA HAI:
+     1. Navbar     - desktop links + mobile drawer
+     2. Footer     - "Quick Links" column
+   Yaani naya page add karna ho to yahan EK LINE add karein,
+   dono jagah apne aap aa jaayega.
+
+   NOTE: "Why Us" yahan nahi hai - wo Home aur About page ka ek
+   SECTION hai, apna alag page nahi. Navbar me 6 se zyada link
+   rakhne par user confuse hota hai (choice overload).
    ============================================================ */
 export const navLinks = [
-  { id: 1, label: "Home",     href: "#home" },
-  { id: 2, label: "Services", href: "#services" },
-  { id: 3, label: "Fleet",    href: "#fleet" },
-  { id: 4, label: "Why Us",   href: "#why-us" },
-  { id: 5, label: "Contact",  href: "#contact" },
+  { id: 1, label: "Home",     to: "/" },
+  { id: 2, label: "About",    to: "/about" },
+  { id: 3, label: "Services", to: "/services" },
+  { id: 4, label: "Fleet",    to: "/fleet" },
+  { id: 5, label: "Packages", to: "/packages" },
+  { id: 6, label: "Contact",  to: "/contact" },
 ];

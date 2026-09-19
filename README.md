@@ -34,64 +34,119 @@ src/
 │   ├── common/              # har jagah reuse hone wale chhote parts
 │   │   ├── Button.jsx           # saare buttons ka ek hi design
 │   │   ├── EnquiryForm.jsx      # LEAD FORM (Hero + Contact dono me)
+│   │   ├── FilterChips.jsx      # filter ki chip row (Fleet + Packages)
 │   │   ├── Icon.jsx             # string naam -> react-icon mapping
 │   │   ├── Logo.jsx             # SVG logo (light/dark variant)
+│   │   ├── PageHeader.jsx       # inner pages ka kaala banner (title + optional photo)
+│   │   ├── ScrollToTop.jsx      # page badle to upar se khule (render kuch nahi karta)
 │   │   └── SectionHeading.jsx   # eyebrow + title + subtitle
 │   │
 │   ├── layout/              # har page par same rehne wale parts
 │   │   ├── TopBar.jsx           # kaali strip (phone, GSTIN, socials)
-│   │   ├── Navbar.jsx           # sticky nav + mobile drawer
+│   │   ├── Navbar.jsx           # sticky nav + mobile drawer + active link
 │   │   ├── Footer.jsx           # links, address, legal info
 │   │   └── FloatingActions.jsx  # mobile bottom call/WhatsApp bar
 │   │
-│   └── home/                # SIRF home page ke sections
-│       ├── Hero.jsx
-│       ├── Services.jsx
-│       ├── Fleet.jsx
-│       ├── Packages.jsx
-│       ├── WhyChooseUs.jsx
-│       ├── HowItWorks.jsx
-│       ├── Testimonials.jsx
-│       ├── CtaBanner.jsx
-│       └── Contact.jsx
+│   └── sections/            # page ke bade tukde — EK SE ZYADA PAGE PAR chalte hain
+│       ├── Hero.jsx             # sirf Home
+│       ├── Services.jsx         # Home + /services (card grid)
+│       ├── ServiceDetails.jsx   # sirf /services (har service ka detail)
+│       ├── Faq.jsx              # sirf /services (accordion, zero JS)
+│       ├── OurStory.jsx         # sirf /about (kahani + photo collage)
+│       ├── OwnerMessage.jsx     # sirf /about (owner ka message)
+│       ├── ServiceAreas.jsx     # sirf /about (Delhi/NCR/outstation + SEO)
+│       ├── Fleet.jsx            # Home + /fleet
+│       ├── Packages.jsx         # Home + /packages (cards + filter)
+│       ├── PackageInclusions.jsx # sirf /packages (kya hai, kya nahi)
+│       ├── WhyChooseUs.jsx      # Home + /about + /fleet
+│       ├── HowItWorks.jsx       # Home + /services + /packages + /about
+│       ├── Testimonials.jsx     # Home + /about
+│       ├── CtaBanner.jsx        # lagbhag har page
+│       └── Contact.jsx          # Home + /contact
 │
 ├── data/                    # 👈 BACKEND DEV YAHAN SE SHURU KARE
-│   ├── siteConfig.js            # business info + nav links
+│   ├── siteConfig.js            # business info + nav links (routes)
 │   ├── services.js              # 7 services
-│   ├── fleet.js                 # vehicles + rate/km
+│   ├── fleet.js                 # vehicles + rate/km + filter options
 │   ├── packages.js              # tour packages
 │   ├── homeContent.js           # stats, why-us, booking steps
+│   ├── about.js                 # story, owner message, service areas
+│   ├── faqs.js                  # 8 sawaal-jawab (/services page)
 │   └── testimonials.js          # customer reviews
 │
-├── pages/
-│   └── Home.jsx             # sections ko order me jodta hai
+├── pages/                   # ek file = ek URL
+│   ├── Home.jsx                 # /
+│   ├── About.jsx                # /about
+│   ├── Services.jsx             # /services
+│   ├── Fleet.jsx                # /fleet
+│   ├── Packages.jsx             # /packages
+│   ├── Contact.jsx              # /contact
+│   └── NotFound.jsx             # 404
 │
-├── App.jsx                  # layout shell (TopBar + Nav + page + Footer)
-├── main.jsx                 # React entry point
+├── routes/
+│   └── AppRoutes.jsx        # URL <-> page ka naksha
+│
+├── App.jsx                  # layout shell (TopBar + Nav + <AppRoutes /> + Footer)
+├── main.jsx                 # React entry point + <BrowserRouter>
 └── index.css                # Tailwind theme + brand colors
 ```
 
-**Rule:** component sirf `data/` se data leta hai, kabhi hard-code nahi karta.
+**Rule 1:** component sirf `data/` se data leta hai, kabhi hard-code nahi karta.
 Isi wajah se backend jodna aasan hoga — sirf `data/` files ko API call se
 replace karna hoga.
 
+**Rule 2:** page khud koi design nahi karta. Page ka kaam sirf `PageHeader` +
+kuch `sections/` ko sahi order me jodna hai. Isi wajah se ek hi Services grid
+Home aur `/services` dono par chalti hai — do jagah maintain nahi karni padti.
+
+**Rule 3:** site ke andar ka link hamesha `<Link to="/fleet">`, kabhi
+`<a href="/fleet">` nahi. `<a>` poora page reload karta hai. `tel:`, `mailto:`
+aur `wa.me` bahar jaate hain — unke liye `<a>` hi sahi hai.
+
 ---
 
-## 3. Home page ke 12 sections aur unka purpose
+## 2b. Routing kaise kaam karti hai
+
+```
+main.jsx          <BrowserRouter>  ← router sabse bahar
+  └── App.jsx     TopBar + Navbar + <AppRoutes /> + Footer
+        └── routes/AppRoutes.jsx   <Route path="/fleet" element={<Fleet />} />
+              └── pages/Fleet.jsx  PageHeader + sections
+```
+
+**Naya page add karna (3 step):**
+
+1. `src/pages/NayaPage.jsx` banayein
+2. `src/routes/AppRoutes.jsx` me import + ek `<Route>` line
+3. navbar me chahiye? `src/data/siteConfig.js` ke `navLinks` me ek line
+
+**`isPage` prop:** section components ye prop lete hain. `isPage={true}` matlab
+"tu ab poora page hai" — tab section apna `SectionHeading` aur apna "View All"
+button chhupa deta hai (PageHeader pehle se heading dikha raha hai, aur user
+already usi page par hai).
+
+**⚠️ Deploy karte waqt:** `BrowserRouter` ke saath `/fleet` par seedha jaane par
+server 404 deta hai. Isliye `public/_redirects` file banayi gayi hai
+(Netlify/Cloudflare). Vercel apne aap handle karta hai; Apache par `.htaccess`
+me RewriteRule chahiye.
+
+---
+
+## 3. Home page ke sections aur unka purpose
 
 | # | Section | File | Purpose (kyun banaya) |
 |---|---------|------|----------------------|
 | 1 | Top Bar | `layout/TopBar.jsx` | Phone + GSTIN sabse upar — instant trust. Mobile par hidden |
 | 2 | Navbar | `layout/Navbar.jsx` | Logo, navigation, "Book Now" CTA. Sticky + mobile drawer |
-| 3 | Hero | `home/Hero.jsx` | 5 second me batana: kya karte hain, bharosa kyun, book kaise. Enquiry form yahin |
-| 4 | Services | `home/Services.jsx` | Card par likhi 7 services. "Mera kaam ye karte hain?" ka jawab |
-| 5 | Fleet | `home/Fleet.jsx` | Gaadi + seats + rate/km. Price chhupane se trust girta hai |
-| 6 | Packages | `home/Packages.jsx` | Ready-made tours — customer ko khud plan nahi banana padta |
-| 7 | Why Choose Us | `home/WhyChooseUs.jsx` | 6 objections ka jawab + asli GSTIN proof card |
-| 8 | How It Works | `home/HowItWorks.jsx` | 3 step booking — "process lamba hoga" wala dar khatam |
-| 9 | Testimonials | `home/Testimonials.jsx` | Social proof, form se theek pehle |
-| 10 | CTA Banner | `home/CtaBanner.jsx` | Peela block = visual interruption, action ka push |
-| 11 | Contact | `home/Contact.jsx` | Call / WhatsApp / Email / Address / Map / Form — chaaro raste |
+| 3 | Hero | `sections/Hero.jsx` | 5 second me batana: kya karte hain, bharosa kyun, book kaise. Enquiry form yahin |
+| 4 | Services | `sections/Services.jsx` | Card par likhi 7 services. "Mera kaam ye karte hain?" ka jawab |
+| 5 | Fleet | `sections/Fleet.jsx` | Gaadi + seats + rate/km. Price chhupane se trust girta hai |
+| 6 | Packages | `sections/Packages.jsx` | Ready-made tours — customer ko khud plan nahi banana padta |
+| 7 | Why Choose Us | `sections/WhyChooseUs.jsx` | 6 objections ka jawab + asli GSTIN proof card |
+| 8 | How It Works | `sections/HowItWorks.jsx` | 3 step booking — "process lamba hoga" wala dar khatam |
+| 9 | Testimonials | `sections/Testimonials.jsx` | Social proof, form se theek pehle |
+| 10 | CTA Banner | `sections/CtaBanner.jsx` | Peela block = visual interruption, action ka push |
+| 11 | Contact | `sections/Contact.jsx` | Call / WhatsApp / Email / Address / Map / Form — chaaro raste |
 | 12 | Footer | `layout/Footer.jsx` | Navigation + SEO keywords + legal (GSTIN, legal name) |
 
 Section ka order ek **sales funnel** hai — `pages/Home.jsx` ke comment me
@@ -165,7 +220,9 @@ Notes:
 | Stats (10+ saal, 25,000+ customers) | `data/homeContent.js` → `stats` | **Sample** — galat claim nahi karni |
 | Reviews | `data/testimonials.js` | **Sample** — Google reviews se replace karein |
 | Social media links | `data/siteConfig.js` → `socials` | `#` placeholder |
-| Vehicle/package photos | `data/fleet.js`, `data/packages.js` | Unsplash URLs — client ki asli photos lagayein |
+| **Form kahan jaaye** | `common/EnquiryForm.jsx` → `DELIVERY` | Abhi **WhatsApp** — submit par owner ka chat khulta hai. Client (a) sirf UI ya (c) email service chahe to ek line badalni hai |
+| Vehicle photos | `public/fleet/` | ✅ client ki apni gaadiyan lagi hui hain |
+| **Package photos** | `public/packages/` | ❌ **abhi ek bhi nahi** — 8 files chahiye, list `photos-client/README.txt` me |
 | OG banner (1200×630) | `public/og-banner.jpg` | Abhi nahi hai |
 
 ---
@@ -191,14 +248,21 @@ Breakpoints (Tailwind default, **mobile-first**):
 
 ## 7. Aage kya banana hai (Phase 2)
 
-`react-router-dom` pehle se install hai. `App.jsx` ke comment me routing
-setup ka poora code likha hai.
+Routing lag chuki hai (`src/routes/AppRoutes.jsx`). Ab ye baaki hai:
 
-- [ ] About Us page
-- [ ] Services listing + `/services/:slug` detail page
-- [ ] Packages listing + `/packages/:slug` detail page
-- [ ] Fleet page (filter: seats, category, budget)
-- [ ] Contact page (alag, form ke saath)
+- [x] ~~Routing setup~~ — `BrowserRouter` + 6 route + 404
+- [x] ~~Contact page~~ — `/contact`
+- [x] ~~Fleet page~~ — `/fleet` (filter abhi baaki)
+- [x] ~~Packages listing~~ — `/packages`
+- [x] ~~Services listing~~ — `/services`
+- [ ] **About page ka asli content** — abhi sirf trust sections hain.
+      Client se chahiye: company ki kahani, owner ka photo + message,
+      office/team photo, milestones
+- [ ] `/services/:slug` detail page (slug `data/services.js` me ready hai)
+- [ ] `/packages/:slug` detail page — client se chahiye: day-wise
+      itinerary, hotel category, aur 8 destination photos
+- [x] ~~Fleet page par filter~~ — type + group size (budget filter baaki)
+- [ ] Privacy Policy + Terms page (footer me abhi `href="#"` placeholder)
 - [ ] Fare calculator (`ratePerKm` × distance)
-- [ ] Gallery
+- [ ] Gallery (`photos-client/` me client ki photos padi hain)
 - [ ] Admin panel (backend ke saath)

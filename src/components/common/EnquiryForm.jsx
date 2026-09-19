@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { FaPaperPlane, FaCircleCheck } from "react-icons/fa6";
+import { FaPaperPlane, FaCircleCheck, FaWhatsapp } from "react-icons/fa6";
 import Button from "./Button";
 import { services } from "../../data/services";
+import { siteConfig } from "../../data/siteConfig";
 
 /* ============================================================
    COMPONENT: <EnquiryForm />
@@ -38,6 +39,32 @@ import { services } from "../../data/services";
      - Admin panel me enquiry list dikhana
      - Rate limiting (spam bots se bachne ke liye)
    ============================================================ */
+
+/* ============================================================
+   LEAD KAHAN JAATI HAI - YE EK LINE POORA BEHAVIOUR BADALTI HAI
+   ============================================================
+   Backend abhi nahi hai. Bina backend ke form sirf console par
+   print karta tha - yaani har enquiry KHO RAHI THI. Website ka
+   sabse keemti hissa bekaar pada tha.
+
+   Isliye filhaal WhatsApp wala raasta on kiya gaya hai:
+   submit dabate hi owner ka WhatsApp khulta hai, aur saari
+   detail pehle se likhi hui hoti hai - customer ko bas send
+   dabana hai. Lead seedha owner ke phone par, zero backend.
+
+     "whatsapp"  -> WhatsApp khulta hai (abhi yahi chalu hai)
+     "none"      -> sirf success message, kahin nahi jaata
+
+   ⚠️ CLIENT KA FAISLA BAAKI HAI (design.txt Part F, sawaal 6).
+   Teen option the: (a) sirf UI, (b) WhatsApp, (c) email service.
+   Client (a) ya (c) chune to bas neeche wali line badalni hai.
+
+   BACKEND BAN JAAYE TO:
+   handleSubmit me POST /api/enquiries add kar dein aur ye poora
+   WhatsApp wala hissa hata dein. Tab tak ye jugaad nahi, ye ek
+   kaam karta hua system hai.
+   ============================================================ */
+const DELIVERY = "whatsapp";
 
 // Form ki shuruaati (khaali) state - reset karne me bhi kaam aati hai
 const initialState = {
@@ -80,6 +107,33 @@ export default function EnquiryForm({ variant = "full" }) {
     return newErrors;
   };
 
+  /* Form ki saari detail ek padhne layak WhatsApp message me.
+     Owner ko ye phone par aisa hi dikhega, isliye har line par
+     ek hi baat - taaki wo ek nazar me quote bana sake. */
+  const buildWhatsAppText = () => {
+    // Slug ki jagah service ka asli naam bhejte hain.
+    // Owner "airport-pick-drop" nahi padhna chahta.
+    const service = services.find((s) => s.slug === form.serviceType);
+
+    const lines = [
+      "New enquiry from the website",
+      "",
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      `Service: ${service ? service.title : form.serviceType}`,
+      `Pickup: ${form.pickup}`,
+    ];
+
+    // Khaali fields bhejne se message bhar jaata hai aur padhne
+    // me mushkil hota hai - isliye jo bhara hai wahi jodte hain
+    if (form.drop) lines.push(`Drop: ${form.drop}`);
+    if (form.travelDate) lines.push(`Travel date: ${form.travelDate}`);
+    if (form.passengers) lines.push(`Passengers: ${form.passengers}`);
+    if (form.message) lines.push(`Note: ${form.message}`);
+
+    return lines.join("\n");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault(); // page reload rokta hai
 
@@ -89,24 +143,60 @@ export default function EnquiryForm({ variant = "full" }) {
       return;
     }
 
-    // TODO(backend): yahan fetch/axios se POST /api/enquiries call karna hai
-    console.log("ENQUIRY SUBMITTED >>>", form);
+    /* TODO(backend): yahan POST /api/enquiries aayega.
+       Tab tak lead WhatsApp se owner tak pahunchti hai. */
+    if (DELIVERY === "whatsapp") {
+      const url = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+        buildWhatsAppText()
+      )}`;
+
+      /* window.open YAHIN chalana zaroori hai - seedha click ke
+         andar. setTimeout ya await ke baad chalayenge to browser
+         use "apne aap khula popup" samajh kar block kar dega. */
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
 
     setIsSubmitted(true);
     setForm(initialState);
-    setTimeout(() => setIsSubmitted(false), 5000); // 5 sec baad form wapas
+    setTimeout(() => setIsSubmitted(false), 8000); // 8 sec baad form wapas
   };
 
-  /* ---- Success screen ---- */
+  /* ---- Success screen ----
+     Text jaanbujh kar "We have received your enquiry" NAHI hai.
+     WhatsApp kisi ke desktop par install na ho, ya tab block ho
+     jaaye - to wo baat JHOOTH ho jaati. Isliye yahan wahi likha
+     hai jo sach me hua, aur ek backup raasta bhi diya hai. */
   if (isSubmitted) {
     return (
       <div className="flex flex-col items-center justify-center rounded-3xl bg-white p-10 text-center shadow-xl">
         <FaCircleCheck className="text-5xl text-green-500" />
-        <h3 className="mt-4 text-xl">Thank You!</h3>
-        <p className="mt-2 text-sm text-ink-700/80">
-          We have received your enquiry. Our team will call you back within
-          15 minutes.
-        </p>
+
+        {DELIVERY === "whatsapp" ? (
+          <>
+            <h3 className="mt-4 text-xl">Almost There!</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ink-700/80">
+              WhatsApp should have opened with your details already filled in.
+              Just press send there and we will call you back within 15 minutes.
+            </p>
+            <p className="mt-4 text-sm text-ink-700/80">
+              Did not open?{" "}
+              <a
+                href={`tel:${siteConfig.phoneRaw}`}
+                className="font-display font-bold text-brand-700 underline underline-offset-2"
+              >
+                Call {siteConfig.phone}
+              </a>
+            </p>
+          </>
+        ) : (
+          <>
+            <h3 className="mt-4 text-xl">Thank You!</h3>
+            <p className="mt-2 text-sm text-ink-700/80">
+              We have received your enquiry. Our team will call you back within
+              15 minutes.
+            </p>
+          </>
+        )}
       </div>
     );
   }
@@ -272,9 +362,29 @@ export default function EnquiryForm({ variant = "full" }) {
         </div>
       )}
 
+      {/* Button ka icon aur label DELIVERY ke hisaab se badalta hai.
+          Kyun? Button par jo likha hai, wahi hona chahiye. "Get Free
+          Quote" dabane par achanak WhatsApp khul jaana ek jhatka hai -
+          aur jhatka lagne wala user form chhod deta hai. */}
       <Button type="submit" variant="primary" size="lg" fullWidth>
-        <FaPaperPlane /> Get Free Quote
+        {DELIVERY === "whatsapp" ? (
+          <>
+            <FaWhatsapp className="text-lg" /> Send On WhatsApp
+          </>
+        ) : (
+          <>
+            <FaPaperPlane /> Get Free Quote
+          </>
+        )}
       </Button>
+
+      {/* Pehle se bata dena = koi surprise nahi */}
+      {DELIVERY === "whatsapp" && (
+        <p className="text-center text-xs leading-relaxed text-ink-700/70">
+          WhatsApp will open with these details already typed out &mdash; you
+          just press send.
+        </p>
+      )}
 
       <p className="text-center text-xs text-ink-700/60">
         We never share your details with anyone. 100% private.

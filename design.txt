@@ -1,24 +1,654 @@
-#	Section	Purpose 
+================================================================================
+  MANVI TOUR & TRAVELS  --  WEBSITE UI DESIGN SPEC
+================================================================================
+  Client   : Manvi Tour & Travels, Dwarka, New Delhi
+  Owner    : Rakesh (Proprietor)  |  GSTIN: 07BGLPR4415A1ZL
+  Phone    : +91 9289360999  (24x7)
+  Stack    : React 19 + Vite 8 + Tailwind CSS v4
 
-1	Top Bar	Phone/GST/timing — instant trust
+  STATUS   : DESIGN ONLY -- abhi sirf design hai, code nahi.
+             Aap padh kar approve/change bataiye, uske baad implement karunga.
 
-2	Navbar	Navigation + "Book Now" CTA
+  PADHNE KA TARIKA:
+    Part A  = Design System (colors, font, spacing -- puri site ka base)
+    Part B  = Reusable Components (button, card, form -- baar baar use honge)
+    Part C  = Page Layout, section by section (12 sections ka wireframe)
+    Part D  = Responsive / Mobile behaviour
+    Part E  = Motion, Accessibility, Assets checklist
+    Part F  = Confirm karne wali cheezein  <-- ISKO ZAROOR DEKHIYE
+================================================================================
 
-3	Hero	Pehli nazar me business samajh aaye + enquiry form
 
-4	Services	Card ke 7 services
-5	Fleet	Gaadiyan + seating + rate/km
+################################################################################
+  PART A  --  DESIGN SYSTEM
+################################################################################
 
-6	Tour Packages	Delhi se popular routes
+A1. BRAND SOCH (design ka ek line me logic)
+---------------------------------------------------------------
+    "Kaala = bharosa aur premium.  Golden = energy aur action.
+     Safed = saaf jaankari."
 
-7	Why Choose Us	Objection handling
+    Visiting card kaala hai + logo golden hai -> website bhi wahi
+    identity follow karegi. Isliye:
 
-8	How It Works	3-step booking process
+      - KAALE blocks    = Hero, Why Choose Us, CTA ke aas-paas, Footer
+      - SAFED blocks    = Services, Packages, How It Works, Contact
+      - GOLDEN          = sirf buttons, badges, icons, numbers
+                          (accent hai -- background nahi banega)
 
-9	Testimonials	Social proof
+    RULE: Golden ko background ki tarah sirf 1 baar use karenge
+          (CTA Banner). Zyada peela = sasta dikhta hai.
 
-10	CTA Banner	Call karne ka push
 
-11	Contact	Form + address + map
+A2. COLOR PALETTE
+---------------------------------------------------------------
+    PRIMARY -- Golden (logo ke suraj/pahiye se)
 
-12	Footer	GSTIN, legal info, links
+      Token          Hex        Kahan use hoga
+      -------------  ---------  ------------------------------------------
+      brand-50       #FEF7EC    bahut halka section background
+      brand-100      #FDEBCF    card hover tint, badge background
+      brand-200      #FAD79F    border, divider
+      brand-300      #F8C36E    disabled button
+      brand-400      #F6B444    kaale background par chhota text
+      brand-500      #F5A623    << MAIN BRAND >> button, icon, highlight
+      brand-600      #D18A0F    button hover, icon hover
+      brand-700      #8F5A06    safed/halke background par TEXT
+                                (contrast 4.9:1 -- chhota text bhi padhega)
+
+    SECONDARY -- Ink / Kaala (visiting card se)
+
+      ink-700        #2B2B2B    dark section ke andar card ka background
+      ink-800        #1A1A1A    body text ka default rang
+      ink-900        #0D0D0D    << MAIN BLACK >> Hero, Footer background
+
+    NEUTRAL / SUPPORT
+
+      white          #FFFFFF    page background, dark card ka text
+      slate-50       #F8FAFC    alternate section background (stripe effect)
+      slate-200      #E2E8F0    card border, input border
+      slate-500      #64748B    muted text, label, caption
+      green-500      #22C55E    WhatsApp button, success message
+      red-500        #EF4444    form validation error
+
+    !! IMPORTANT CONTRAST RULE !!
+      - Safed background par golden TEXT likhna ho  -> brand-700 use karna
+      - brand-500 sirf BACKGROUND ya ICON ke liye, chhote text ke liye nahi
+      - Golden button ka text hamesha ink-900 (kaala), safed kabhi nahi
+
+
+A3. TYPOGRAPHY
+---------------------------------------------------------------
+    Display font : Poppins   -> h1..h4, buttons, numbers, badges
+    Body font    : Inter     -> paragraph, label, input, caption
+
+    TYPE SCALE (mobile -> desktop)
+
+      Role            Mobile      Desktop     Weight   Color
+      --------------  ----------  ----------  -------  ----------------
+      H1 (hero)       36px        60px        700      white
+      H2 (section)    28px        40px        700      ink-900
+      H3 (card title) 20px        22px        600      ink-900
+      H4 (sub)        17px        18px        600      ink-900
+      Body            15px        16px        400      ink-800 / 70% white
+      Small / label   13px        14px        500      slate-500
+      Eyebrow         12px        12px        700      brand-700
+                      (UPPERCASE, letter-spacing 0.1em)
+      Price / stat    24px        32px        700      brand-500 ya ink-900
+
+    LINE HEIGHT: heading 1.1-1.2  |  paragraph 1.6-1.7
+    MAX WIDTH  : paragraph kabhi 65 character se lamba nahi (max-w-xl/2xl)
+
+
+A4. SPACING, RADIUS, SHADOW, GRID
+---------------------------------------------------------------
+    SPACING SCALE (4px base -- sirf inhi values ka use):
+      4 . 8 . 12 . 16 . 24 . 32 . 48 . 64 . 96 px
+
+    SECTION VERTICAL PADDING  : 64px mobile / 96px desktop   (.section-y)
+    CONTAINER                 : max-width 1280px, side padding 16/24/32px
+                                (.container-x)
+    CARD INTERNAL PADDING     : 24px mobile / 32px desktop
+    GRID GAP                  : 16px mobile / 24px desktop
+
+    BORDER RADIUS
+      Button / badge / pill  : 9999px (full round)
+      Card / image / input   : 16px
+      Bade panel (form box)  : 24px
+
+    SHADOW (bahut halka -- travel site professional dikhni chahiye)
+      rest  : 0 1px 3px rgba(0,0,0,0.06)
+      hover : 0 12px 28px rgba(0,0,0,0.10)
+      golden: 0 10px 24px rgba(245,166,35,0.28)   <- sirf primary button
+
+    SECTION BACKGROUND RHYTHM (stripe -- do safed section chipke nahi lagte)
+      Hero          kaala   (ink-900)
+      Services      safed
+      Fleet         slate-50
+      Packages      safed
+      Why Choose Us kaala   (ink-900)
+      How It Works  safed
+      Testimonials  slate-50
+      CTA Banner    GOLDEN  (brand-500)
+      Contact       safed
+      Footer        kaala   (ink-900)
+
+
+################################################################################
+  PART B  --  REUSABLE COMPONENTS
+################################################################################
+
+B1. BUTTON  (4 variants)
+---------------------------------------------------------------
+    +--------------------------------------------------------------------+
+    | PRIMARY    [ bg brand-500 | text ink-900 | bold | golden shadow ]   |
+    |            hover: bg brand-600 + 2px upar uthega                    |
+    |            use: "Book Now", "Send Enquiry", "Call Now"              |
+    |                                                                     |
+    | SECONDARY  [ transparent | 2px border brand-500 | text brand-500 ]  |
+    |            hover: bg brand-500, text ink-900 (fill ho jaata hai)    |
+    |            use: kaale background par doosra option                  |
+    |                                                                     |
+    | DARK       [ bg ink-900 | text white ]                              |
+    |            use: safed ya golden section ke andar                    |
+    |                                                                     |
+    | WHATSAPP   [ bg green-500 | text white | WhatsApp icon ]            |
+    +--------------------------------------------------------------------+
+
+    SIZES : sm 40px | md 48px (default) | lg 56px  -- height
+    ICON  : text ke left me 8px gap
+    FOCUS : 2px golden ring + 2px offset (keyboard users ke liye zaroori)
+    TAP   : mobile par minimum 44x44px (Apple/Google guideline)
+
+
+B2. SECTION HEADING  (har section ke upar same pattern)
+---------------------------------------------------------------
+                    OUR SERVICES                <- eyebrow, golden, UPPERCASE
+            Everything You Need To Travel        <- H2, kaala
+       One line me batao ki is section me kya    <- sub, slate-500, max 2 line
+       milega aur customer ko kya fayda hai.
+                    ----                         <- 48px golden underline bar
+
+    Alignment: center (desktop + mobile dono)
+    Neeche gap: 48px
+    Dark section me: title white, sub white/60, eyebrow brand-400
+
+
+B3. CARD  (base style -- Services / Fleet / Packages sab isi par bane)
+---------------------------------------------------------------
+    rest   : bg white, border 1px slate-200, radius 16px, halka shadow
+    hover  : border brand-500, shadow bada, 4px upar translate,
+             icon/image halka zoom (scale 1.05), 250ms ease-out
+    badge  : top-right corner par pill -- "Popular" / "Best Seller"
+             (bg brand-500, text ink-900, 11px bold uppercase)
+
+
+B4. ENQUIRY FORM  (sabse important component -- lead yahin se aati hai)
+---------------------------------------------------------------
+    2 jagah dikhega:  Hero (dark panel)  +  Contact section (light panel)
+
+    +------------------------------------------+
+    |  Get a Free Quote            [H3]        |
+    |  Fill kijiye, 10 min me call aayegi      |
+    |                                          |
+    |  Full Name *          [____________]     |
+    |  Mobile Number *      [ +91 ________]    |
+    |  Service Type *       [ dropdown  v]     |
+    |  Pickup Location      [____________]     |
+    |  Drop Location        [____________]     |
+    |  Travel Date  | Pax   [__date__][_#_]    |  <- 2 column
+    |  Message              [____________]     |  <- textarea, 3 rows
+    |                                          |
+    |  [   SEND ENQUIRY   ]  <- full width     |
+    |                                          |
+    |  Ya seedha call kijiye: +91 9289360999   |
+    +------------------------------------------+
+
+    INPUT STYLE
+      height 48px, radius 12px, border 1px slate-200, padding 16px
+      focus : border brand-500 + 3px golden glow ring
+      error : border red-500 + neeche 13px red message
+      label : upar, 14px, weight 500  (placeholder ko label mat banao)
+
+    DARK PANEL VERSION (Hero ke andar)
+      panel bg = ink-800, border = white/10
+      input bg = white/5, text = white, placeholder = white/40
+
+    STATES : normal -> submitting (spinner + "Sending...") -> success
+    SUCCESS: form ki jagah green tick + "Dhanyawad! Hum 10 min me call karenge"
+    NOTE   : backend abhi juda nahi hai -- Part F ka sawaal #6 dekhein.
+
+
+################################################################################
+  PART C  --  PAGE LAYOUT (12 SECTIONS)
+################################################################################
+
+  Section order ek SALES FUNNEL hai:
+    dhyan khinchna -> bharosa banana -> option dikhana -> daam dikhana
+    -> shak door karna -> proof dena -> action karwana
+
+
+--- 1. TOP BAR -----------------------------------------------------------------
+    Height 40px | bg ink-900 | text 13px white/70 | desktop only (mobile hidden)
+
+    +---------------------------------------------------------------------+
+    | (phone) +91 9289360999 | (clock) 24x7 Open | GSTIN: 07BGLP...  fb ig |
+    +---------------------------------------------------------------------+
+      <-------------- left group --------------->        <-- right group -->
+
+    Kyun: phone number sabse pehli line me -> instant trust + turant call.
+    Hover: link par golden.
+
+
+--- 2. NAVBAR ------------------------------------------------------------------
+    Height 72px mobile / 80px desktop | sticky top | z-50
+
+    +----------------------------------------------------------------------+
+    | [LOGO] Manvi          Home Services Fleet Why Us Contact   [Book Now] |
+    |        Tour & Travels                                                 |
+    +----------------------------------------------------------------------+
+
+    SCROLL BEHAVIOUR
+      top par        : bg white, koi shadow nahi
+      scroll ke baad : bg white + halka shadow + height 72px (thoda chhota)
+
+    ACTIVE LINK : neeche 2px golden underline
+    MOBILE      : logo + hamburger. Tap -> right se drawer slide (280px)
+                  drawer me links + badi Call/WhatsApp button + address
+                  peeche kaala overlay, ESC ya overlay tap se band
+
+
+--- 3. HERO --------------------------------------------------------------------
+    bg ink-900 | padding 56px top / 64px bottom (mobile), 80/96 desktop
+    Background decor: 2 golden blur glow + dotted pattern (halka)
+
+    DESKTOP -- 2 column, 7:5 ratio
+    +---------------------------------------+------------------------------+
+    | [shield] GST REGISTERED . DELHI NCR   |  +------------------------+  |
+    |                                       |  |  Get a Free Quote      |  |
+    | Delhi NCR's Most TRUSTED              |  |                        |  |
+    | Travel Partner                        |  |  [ Enquiry Form = B4 ] |  |
+    |  (TRUSTED par golden brush highlight) |  |                        |  |
+    |                                       |  |  [ SEND ENQUIRY ]      |  |
+    | Airport pick & drop, outstation taxi, |  +------------------------+  |
+    | tempo traveller, luxury car aur tour  |                              |
+    | packages -- sab ek jagah.             |                              |
+    |                                       |                              |
+    | [ CALL NOW ]  [ WHATSAPP ]            |                              |
+    |                                       |                              |
+    | * * * * *  4.8/5  .  500+ reviews     |                              |
+    +---------------------------------------+------------------------------+
+    |  10+ Years | 25,000+ Customers | 50+ Vehicles | 24x7 Support         |
+    +----------------------------------------------------------------------+
+       ^ stats strip: upar border white/10, 4 column, number golden 32px
+
+    MOBILE  : sab ek ke neeche -- badge, H1, para, 2 button (full width),
+              rating, form, stats 2x2 grid.
+    RULE    : Hero fold me "kya karte hain + call button" dono dikhne chahiye.
+
+
+--- 4. SERVICES ----------------------------------------------------------------
+    bg white | SectionHeading: "OUR SERVICES / Everything You Need To Travel"
+    Grid: 1 col mobile / 2 col tablet / 3 col desktop, gap 24px
+    Total 7 cards + 1 CTA card = 8 (taaki aakhri card grid me akela na dikhe)
+
+    +--------------------------+
+    |  (icon 56px golden       |   Card ka structure:
+    |   circle bg brand-50)    |     - icon badge 56px, radius 16px
+    |                 [Popular]|     - H3 title
+    |  Tour Packages           |     - 2-3 line description (slate-500)
+    |                          |     - "Learn more ->" link (brand-700)
+    |  Ready-made aur custom   |     - hover: card upar uthe, icon bg
+    |  tour packages -- hotel, |       golden ho jaaye, icon white
+    |  cab, driver included.   |
+    |                          |
+    |  Learn more ->           |
+    +--------------------------+
+
+    7 services: Tour Packages (Popular badge) | Outstation Travel |
+    Luxury Car Booking | Tempo Traveller | Airport Pick & Drop |
+    Local City Taxi | Corporate / Event Travel
+    8th card (CTA): "Kuch aur chahiye? Custom trip plan karwaiye"
+                    bg ink-900, golden text, [ Call Now ] button
+
+
+--- 5. FLEET -------------------------------------------------------------------
+    bg slate-50 | Heading: "OUR FLEET / Choose Your Ride"
+    Grid 1/2/3 column, gap 24px. 7 vehicles.
+
+    +----------------------------------+
+    |  [ vehicle photo 16:9, radius    |   Photo par top-left pill =
+    |    top 16px, hover zoom 1.05 ]   |   category (Sedan/MPV/Bus)
+    |                                  |
+    |  Toyota Innova Crysta       [H3] |
+    |  Premium MPV                     |
+    |  ------------------------------- |
+    |  (users) 6 Seats  (bag) 4 Bags   |   <- icon row, slate-500
+    |  (snow) AC        (fuel) Diesel  |
+    |  ------------------------------- |
+    |  Rs 20 /km        [ Book Now ]   |   <- price golden 24px bold
+    |  * toll/parking extra            |   <- 12px disclaimer, zaroori
+    +----------------------------------+
+
+    Fleet + rate/km:
+      Swift Dzire       Sedan          4 seat   Rs 12/km
+      Ertiga            MPV            6 seat   Rs 16/km
+      Kia Carens        Premium MPV    6 seat   Rs 18/km
+      Innova Crysta     Premium MPV    6 seat   Rs 20/km
+      Tempo Traveller   Tempo         17 seat   Rs 26/km
+      26 Seater         Mini Bus      26 seat   Rs 42/km
+      Luxury Coach      Bus           45 seat   Rs 55/km
+
+    Neeche center me note: "Rates indicative hain -- exact quote ke liye
+    call kijiye" + [ Get Exact Quote ] button.
+    KYUN: rate chhupane se trust girta hai, isliye khul kar dikha rahe hain.
+
+
+--- 6. TOUR PACKAGES -----------------------------------------------------------
+    bg white | Heading: "TOUR PACKAGES / Popular Trips From Delhi"
+    Grid 1/2/3 column. 6 packages.
+
+    +----------------------------------+
+    |  [ destination photo 4:3 ]       |
+    |   dark gradient overlay neeche   |
+    |   par -> text padhne ke liye     |
+    |                        [4D/3N]   |  <- duration pill top-right
+    |                                  |
+    |  Golden Triangle Tour       [H3] |
+    |  (pin) Delhi-Agra-Jaipur-Delhi   |  <- route, 14px slate-500
+    |                                  |
+    |  [Sightseeing] [Hotel] [Cab]     |  <- tag chips, brand-50 bg
+    |  ------------------------------- |
+    |  Starts from                     |  <- 12px slate-500
+    |  Rs 12,999 /person  [ Enquire ]  |  <- price brand-700 28px
+    +----------------------------------+
+
+    Packages: Golden Triangle 12,999 | Same Day Agra 4,499 |
+    Shimla Manali 18,999 | Char Dham 24,999 | Haridwar Rishikesh 8,999 |
+    Royal Rajasthan 21,999
+
+
+--- 7. WHY CHOOSE US -----------------------------------------------------------
+    bg ink-900 (DARK -- ye emotional / trust section hai)
+    Heading white, eyebrow brand-400.
+    Layout: left 6 benefit (2x3 grid), right GST proof card.
+
+    +---------------------------------------+----------------------------+
+    | (icon) Transparent Pricing            |   +--------------------+   |
+    |        Jo bataya wahi lagega,         |   |  (verified badge)  |   |
+    |        chhupa charge nahi.            |   |                    |   |
+    |                                       |   |  GST REGISTERED    |   |
+    | (icon) Verified Drivers               |   |  BUSINESS          |   |
+    | (icon) Always On Time                 |   |                    |   |
+    | (icon) GST Registered Business        |   |  GSTIN             |   |
+    | (icon) Well-Maintained Fleet          |   |  07BGLPR4415A1ZL   |   |
+    | (icon) 24x7 Live Support              |   |                    |   |
+    |                                       |   |  Legal Name RAKESH |   |
+    |                                       |   |  Proprietorship    |   |
+    |                                       |   |  Reg. 13 Apr 2026  |   |
+    |                                       |   +--------------------+   |
+    +---------------------------------------+----------------------------+
+
+    Benefit item: 40px golden icon left, title white 18px, 2 line white/60
+    GST card    : bg ink-700, 1px golden border, golden glow shadow,
+                  GSTIN monospace font (document jaisa lage)
+    KYUN        : asli GSTIN dikhana sabse bada trust signal hai --
+                  competitor ke paas aksar nahi hota.
+
+
+--- 8. HOW IT WORKS ------------------------------------------------------------
+    bg white | Heading: "SIMPLE PROCESS / Book In 3 Easy Steps"
+    Desktop: 3 column horizontal, beech me dotted golden connector line
+    Mobile : vertical stack, left side vertical dotted line
+
+       01 ---------------- 02 ---------------- 03
+    +-----------+       +-----------+       +-----------+
+    |    01     |       |    02     |       |    03     |  <- 64px circle,
+    |  (phone)  |       |  (quote)  |       |   (car)   |     golden bg,
+    |           |       |           |       |           |     number ink-900
+    | Call Or   |       | Get Quote |       | Vehicle   |
+    | Send      |       | & Confirm |       | At Your   |
+    | Enquiry   |       |           |       | Doorstep  |
+    |           |       |           |       |           |
+    | 2 line    |       | 2 line    |       | 2 line    |
+    | detail    |       | detail    |       | detail    |
+    +-----------+       +-----------+       +-----------+
+
+    Center aligned. Step number circle ke andar bada, icon uske neeche.
+    KYUN: "process lamba hoga" wala dar 3 step dekh kar khatam ho jaata hai.
+
+
+--- 9. TESTIMONIALS ------------------------------------------------------------
+    bg slate-50 | Heading: "CUSTOMER REVIEWS / What Our Riders Say"
+    Desktop: 3 card ek row me | Mobile: horizontal swipe carousel + dots
+
+    +----------------------------------+
+    |  " (bada golden quote mark)      |
+    |                                  |
+    |  * * * * *                       |  <- 5 golden star
+    |                                  |
+    |  "Driver time par aaya, gaadi    |  <- review text, 15px
+    |   ekdum saaf thi. Agra trip      |
+    |   bahut acchi rahi."             |
+    |  ------------------------------- |
+    |  (avatar)  Rohit Sharma          |  <- 44px circle, initials golden bg
+    |            Dwarka, Delhi         |  <- 13px slate-500
+    |            [Agra Tour]           |  <- trip type chip
+    +----------------------------------+
+
+    Upar summary strip: "4.8 out of 5  |  * * * * *  |  Based on 500+ trips"
+    NOTE: reviews abhi sample hain -- Google reviews se replace karna hai.
+
+
+--- 10. CTA BANNER -------------------------------------------------------------
+    bg brand-500 (GOLDEN) -- puri page me akela golden block.
+    Padding 64px mobile / 80px desktop. Halka pattern overlay
+    (diagonal lines, 5% black).
+
+    +----------------------------------------------------------------------+
+    |                                                                      |
+    |         Planning A Trip? Let's Talk.              [H2, ink-900]      |
+    |    Ek call me free quote -- 24x7 available.       [ink-900/70]       |
+    |                                                                      |
+    |      [ CALL +91 9289360999 ]    [ WHATSAPP US ]                      |
+    |         (dark button)             (white button + green icon)        |
+    +----------------------------------------------------------------------+
+
+    Center aligned. Desktop par right side me halki gaadi illustration.
+    KYUN: golden block = visual interruption. Scroll rok kar action karwata hai.
+
+
+--- 11. CONTACT ----------------------------------------------------------------
+    bg white | Heading: "GET IN TOUCH / Contact Manvi Tour & Travels"
+    Desktop: 2 column (left info 5, right form 7)
+
+    +-------------------------------+--------------------------------+
+    | (phone) Call Us               |  +--------------------------+  |
+    |  +91 9289360999  . 24x7       |  |  Send Us An Enquiry      |  |
+    |                               |  |                          |  |
+    | (whatsapp) WhatsApp           |  |  [ Enquiry Form = B4 ]   |  |
+    |  Chat Now ->                  |  |                          |  |
+    |                               |  |  [ SEND ENQUIRY ]        |  |
+    | (mail) Email                  |  +--------------------------+  |
+    |  info@manvitravels.com        |                                |
+    |                               |                                |
+    | (pin) Visit Us                |                                |
+    |  Shop No. 5, C-76, Ground Fl. |                                |
+    |  Block C/1, Mahavir Vihar,    |                                |
+    |  Dwarka Sector-1, New Delhi   |                                |
+    |  - 110045                     |                                |
+    +-------------------------------+--------------------------------+
+    |  [ GOOGLE MAP -- full width iframe, 320px height, radius 16px,  |
+    |    grayscale filter, hover par colour ]                         |
+    +-----------------------------------------------------------------+
+
+    Contact item: 48px golden circle icon + label (13px slate) + value (bold)
+    Poora item clickable (tel: / wa.me / mailto: / Google Maps link)
+
+
+--- 12. FOOTER -----------------------------------------------------------------
+    bg ink-900 | padding 64px top, 32px bottom | 4 column desktop / 1 mobile
+
+    +-----------+-----------+-----------+------------------------+
+    | [LOGO]    | Quick     | Our       | Contact                |
+    | Manvi     | Links     | Services  |                        |
+    | Tour &    |           |           | (phone) +91 92893...   |
+    | Travels   | Home      | Tour Pkg  | (mail) info@...        |
+    |           | Services  | Outstation| (pin) Shop No.5, C-76  |
+    | 2 line    | Fleet     | Luxury Car|   Mahavir Vihar,       |
+    | about     | Packages  | Tempo Trav|   Dwarka Sec-1,        |
+    |           | Why Us    | Airport   |   New Delhi 110045     |
+    | fb ig yt  | Contact   | Local Taxi|                        |
+    | (36px     |           | Corporate | [ BOOK NOW ]           |
+    |  circles) |           |           |                        |
+    +-----------+-----------+-----------+------------------------+
+    |  SEO line: "Taxi service in Dwarka | Tempo traveller Delhi |        |
+    |   Airport taxi Delhi NCR | Outstation cab Delhi" (12px white/40)    |
+    +---------------------------------------------------------------------+
+    |  (c) 2026 Manvi Tour & Travels. All rights reserved.                |
+    |  GSTIN: 07BGLPR4415A1ZL . Legal Name: RAKESH . Proprietorship       |
+    |  Privacy Policy . Terms & Conditions                                |
+    +---------------------------------------------------------------------+
+
+    Column heading: white 16px bold, neeche 32px golden bar
+    Links: white/60 -> hover golden + 4px right shift
+
+
+--- 13. FLOATING ACTIONS (mobile only -- section nahi, overlay hai) -------------
+    Bottom fixed bar, height 60px, z-40, sirf mobile (<768px)
+
+    +----------------------------------------------------------------------+
+    |     (phone) CALL NOW      |      (whatsapp) WHATSAPP                 |
+    |     bg ink-900 white      |      bg green-500 white                  |
+    +----------------------------------------------------------------------+
+
+    Hero scroll hone ke baad hi dikhega (300px scroll par slide-up).
+    Page ke neeche 60px extra padding taaki footer content chhupe nahi.
+
+
+################################################################################
+  PART D  --  RESPONSIVE BEHAVIOUR
+################################################################################
+
+    Breakpoints (Tailwind default, MOBILE FIRST):
+      base  < 640px   mobile
+      sm    >= 640px  bada mobile
+      md    >= 768px  tablet
+      lg    >= 1024px laptop
+      xl    >= 1280px desktop
+
+    Section          Mobile           Tablet (md)     Desktop (lg)
+    ---------------  ---------------  --------------  ----------------
+    Top Bar          HIDDEN           hidden          visible
+    Navbar           logo+hamburger   logo+hamburger  full nav + CTA
+    Hero             stack, form 2nd  stack           2 col (7:5)
+    Hero stats       2x2 grid         4 col           4 col
+    Services         1 col            2 col           3 col
+    Fleet            1 col            2 col           3 col
+    Packages         1 col            2 col           3 col
+    Why Choose Us    stack, 1 col     2 col benefits  6+4 split
+    How It Works     vertical         3 col           3 col
+    Testimonials     swipe carousel   2 col           3 col
+    CTA Banner       stack buttons    inline          inline + art
+    Contact          stack, form 2nd  stack           5:7 split
+    Footer           1 col accordion  2 col           4 col
+    Floating bar     VISIBLE          hidden          hidden
+
+    MOBILE RULES
+      - H1 max 36px, 3 line se zyada nahi
+      - button full width, minimum 48px height
+      - image lazy load (hero ka nahi -- wo eager)
+      - horizontal scroll BILKUL NAHI (body overflow-x: clip)
+      - form input font-size 16px (warna iPhone khud zoom kar deta hai)
+
+
+################################################################################
+  PART E  --  MOTION, ACCESSIBILITY, ASSETS
+################################################################################
+
+E1. MOTION (kam rakhenge -- business site hai, showreel nahi)
+    - Transition duration: 200-300ms, ease-out
+    - Card hover  : translateY(-4px) + shadow
+    - Button hover: translateY(-2px) + colour change
+    - Section entry: fade-up 20px, ek baar, stagger 80ms
+    - Hero illustration: float animation 6s infinite (already CSS me hai)
+    - prefers-reduced-motion: animation OFF kar dena
+
+E2. ACCESSIBILITY
+    - Poore page par SIRF EK <h1> (Hero wala)
+    - Heading order kabhi skip nahi (h2 ke baad h4 nahi)
+    - Har image par asli alt text ("Toyota Innova Crysta 6 seater")
+    - Icon-only button par aria-label
+    - Form: har input ka <label>, error aria-describedby se juda
+    - Focus ring har jagah dikhe (outline: none akela mat karna)
+    - Text contrast 4.5:1 minimum -- isiliye brand-700 bana hai
+    - Mobile drawer: ESC se band, focus trap, background scroll lock
+
+E3. ASSETS CHAHIYE (client se)
+    [ ] Asli logo -- SVG ya PNG transparent (abhi SVG recreation hai)
+    [ ] 7 gaadiyon ki asli photo (1200x800, landscape)  <- Unsplash ki jagah
+    [ ] 6 destination photo (Agra, Jaipur, Manali, Kedarnath...)
+    [ ] Office / team photo (About section ke liye, Phase 2)
+    [ ] OG banner 1200x630 -> public/og-banner.jpg (WhatsApp share preview)
+    [ ] Favicon 512x512
+    Font: Poppins + Inter -> Google Fonts se index.html me link karna hai
+
+
+################################################################################
+  PART F  --  AAPKO CONFIRM KARNI HAIN (approve se pehle padh lijiye)
+################################################################################
+
+    1. COLOR MISMATCH
+       README me brand-500 = #FFC61A likha hai, lekin index.css me
+       #F5A623 hai. Is design me maine #F5A623 (logo wala golden) liya hai.
+       Batayein kaunsa sahi hai -- doosri jagah main theek kar dunga.
+
+    2. RATES SAMPLE HAIN
+       Rs 12/km se Rs 55/km tak ke rate aur package prices (4,499 se
+       24,999) abhi SAMPLE hain. Client se confirm karayein -- website
+       par galat rate = customer ka gussa.
+
+    3. STATS SAMPLE HAIN
+       "10+ Years", "25,000+ Customers", "50+ Vehicles", "4.8/5 rating,
+       500+ reviews" -- ye numbers verify karayein. Galat claim legally
+       aur trust dono ke liye theek nahi.
+
+    4. EMAIL CONFIRM NAHI HUA
+       info@manvitravels.com placeholder hai -- GST document me email
+       nahi tha. Asli email chahiye.
+
+    5. TESTIMONIALS
+       Abhi 3 sample review hain. Google Business reviews se replace
+       karna behtar hoga (screenshot ya link bhejiye).
+
+    6. FORM SUBMIT KAHAN JAYE?
+       Backend abhi nahi hai. 3 option:
+         (a) abhi sirf UI -- submit par success message (backend baad me)
+         (b) WhatsApp par redirect -- form bhar ke seedha chat khul jaaye
+         (c) free service (Formspree/EmailJS) se owner ko email
+       Aap batayein kya karna hai.
+
+    7. FOLDER NAAM
+       Folder me "&" hone se Windows par scripts todhne padte hain.
+       "manvi-tour-travels" rakh dein to package.json normal ho jayega.
+
+
+################################################################################
+  IMPLEMENT KARNE KA PLAN (approve ke baad -- is order me)
+################################################################################
+
+    Step 1  index.css -- final colour tokens + Google Fonts link
+    Step 2  Common components: Button, SectionHeading, Card, EnquiryForm
+    Step 3  Layout: TopBar, Navbar (+ drawer), Footer, FloatingActions
+    Step 4  Sections upar se neeche: Hero -> Services -> Fleet -> Packages
+            -> WhyChooseUs -> HowItWorks -> Testimonials -> CtaBanner
+            -> Contact
+    Step 5  Responsive pass (mobile / tablet / desktop teeno check)
+    Step 6  Accessibility pass + performance (image lazy load)
+    Step 7  npm run build + preview me final check
+
+================================================================================
+  END -- DESIGN SPEC v1
+  Aap padh kar batayein: kya theek hai, kya badalna hai, aur Part F ke
+  7 sawaalon ke jawab. Uske baad code likhna shuru karunga.
+================================================================================

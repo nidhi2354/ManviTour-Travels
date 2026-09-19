@@ -1,17 +1,8 @@
 /* ============================================================
    COMPONENT: <Button />
    PURPOSE: Poori website me button ka look ek jaisa rahe.
-            Agar kal client bole "button ka colour badlo", to sirf
-            YE file badalni padegi - 40 jagah nahi.
-
-   PROPS:
-     variant = "primary"   -> peela bhara button (main action: Book Now, Call)
-               "dark"      -> kaala bhara button (dark CTA)
-               "outline"   -> sirf border (secondary action: View All)
-               "white"     -> safed button (dark background ke upar)
-     size    = "md" | "lg" | "sm"
-     as      = "button" | "a"   -> link banana ho to as="a" href="..."
-     fullWidth = true            -> mobile par poori width le lega
+          
+  
    ============================================================ */
 
 const variants = {

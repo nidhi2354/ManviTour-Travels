@@ -1,5 +1,7 @@
-import { FaArrowRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { FaArrowRight, FaArrowDown } from "react-icons/fa6";
 import SectionHeading from "../common/SectionHeading";
+import Button from "../common/Button";
 import Icon from "../common/Icon";
 import { services } from "../../data/services";
 
@@ -22,18 +24,27 @@ import { services } from "../../data/services";
    engagement badhta hai.
    ============================================================ */
 
-export default function Services() {
+export default function Services({ isPage = false }) {
   return (
     <section id="services" className="section-y bg-brand-50/40">
       <div className="container-x">
-        <SectionHeading
-          eyebrow="Our Services"
-          title="One Solution For Every Journey"
-          subtitle="Whether it is a 20 minute airport drop or a 10 day family holiday, we have the right vehicle and the right package for every need."
-        />
+        {/* isPage par heading chhupa dete hain - /services page ka
+            PageHeader pehle se yahi baat bada likh kar dikha raha hai.
+            Ek page par do bade heading = duplicate lagta hai. */}
+        {!isPage && (
+          <SectionHeading
+            eyebrow="Our Services"
+            title="One Solution For Every Journey"
+            subtitle="Whether it is a 20 minute airport drop or a 10 day family holiday, we have the right vehicle and the right package for every need."
+          />
+        )}
 
         {/* ---------- SERVICE CARDS GRID ---------- */}
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${
+            isPage ? "" : "mt-14"
+          }`}
+        >
           {services.map((service) => (
             <article
               key={service.id}
@@ -60,16 +71,36 @@ export default function Services() {
                 {service.description}
               </p>
 
-              {/* Link abhi #contact par jata hai.
-                  BACKEND/ROUTING NOTE: jab service detail pages banenge,
-                  ise <Link to={`/services/${service.slug}`}> bana dena. */}
-              <a
-                href="#contact"
-                className="mt-6 inline-flex items-center gap-2 font-display text-sm font-bold text-ink-900 transition-colors group-hover:text-brand-600"
-              >
-                Enquire Now
-                <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
+              {/* CARD KA LINK DO JAGAH DO ALAG KAAM KARTA HAI
+
+                  Home par     -> "Enquire Now"  -> /contact
+                     (home par sirf 2 line ka intro hai, aage jaanne
+                      ke liye poochna hi padega)
+
+                  /services par -> "See Details" -> #slug anchor
+                     (usi page par neeche poora detail block hai -
+                      wahan bhejna zyada kaam ka hai, contact page
+                      par dhakelna jaldbaazi hogi)
+
+                  Anchor ke liye <a> hi sahi hai, <Link> nahi. Ye site
+                  ka doosra PAGE nahi hai - isi page ka hissa hai. */}
+              {isPage ? (
+                <a
+                  href={`#${service.slug}`}
+                  className="mt-6 inline-flex items-center gap-2 font-display text-sm font-bold text-ink-900 transition-colors group-hover:text-brand-600"
+                >
+                  See Details
+                  <FaArrowDown className="text-xs transition-transform duration-300 group-hover:translate-y-0.5" />
+                </a>
+              ) : (
+                <Link
+                  to="/contact"
+                  className="mt-6 inline-flex items-center gap-2 font-display text-sm font-bold text-ink-900 transition-colors group-hover:text-brand-600"
+                >
+                  Enquire Now
+                  <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              )}
             </article>
           ))}
 
@@ -83,14 +114,27 @@ export default function Services() {
               Cannot find what you are looking for? No problem &mdash; we build
               fully custom plans too.
             </p>
-            <a
-              href="#contact"
+            <Link
+              to="/contact"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-6 py-3 font-display text-sm font-bold text-ink-900 transition-transform hover:-translate-y-0.5"
             >
               Talk To Us <FaArrowRight className="text-xs" />
-            </a>
+            </Link>
           </article>
         </div>
+
+        {/* ---------- HOME SE SERVICES PAGE KA RAASTA ----------
+            Home par ye section sirf ek jhalak hai. Jise aur dekhna
+            hai wo yahan se poore Services page par chala jaata hai.
+            /services page par ye button nahi chahiye (user wahin hai
+            pehle se), isliye !isPage. */}
+        {!isPage && (
+          <div className="mt-12 text-center">
+            <Button as={Link} to="/services" variant="dark" size="lg">
+              View All Services <FaArrowRight className="text-xs" />
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

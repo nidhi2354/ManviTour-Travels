@@ -1,11 +1,12 @@
-import Hero from "../components/home/Hero";
-import Services from "../components/home/Services";
-import Fleet from "../components/home/Fleet";
-import WhyChooseUs from "../components/home/WhyChooseUs";
-import HowItWorks from "../components/home/HowItWorks";
-import Testimonials from "../components/home/Testimonials";
-import CtaBanner from "../components/home/CtaBanner";
-import Contact from "../components/home/Contact";
+import Hero from "../components/sections/Hero";
+import Services from "../components/sections/Services";
+import Fleet from "../components/sections/Fleet";
+import Packages from "../components/sections/Packages";
+import WhyChooseUs from "../components/sections/WhyChooseUs";
+import HowItWorks from "../components/sections/HowItWorks";
+import Testimonials from "../components/sections/Testimonials";
+import CtaBanner from "../components/sections/CtaBanner";
+import Contact from "../components/sections/Contact";
 
 /* ============================================================
    PAGE: HOME
@@ -22,7 +23,7 @@ import Contact from "../components/home/Contact";
      1. Hero         -> ATTENTION : "ye kaun hain, kya karte hain"
      2. Services     -> INTEREST  : "mera kaam ye karte hain ya nahi"
      3. Fleet        -> EVALUATION: "gaadi kaisi, rate kitna"
-     -- Packages section client ke kehne par hataya gaya hai --
+     4. Packages     -> DESIRE    : "ready-made tour, khud plan nahi banana"
      5. WhyChooseUs  -> OBJECTION : "par bharosa karun kaise?"
      6. HowItWorks   -> CLARITY   : "book karna aasaan hai"
      7. Testimonials -> PROOF     : "auron ka experience accha raha"
@@ -39,6 +40,7 @@ export default function Home() {
       <Hero />
       <Services />
       <Fleet />
+      <Packages />
       <WhyChooseUs />
       <HowItWorks />
       <Testimonials />

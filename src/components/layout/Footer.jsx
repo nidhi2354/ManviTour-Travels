@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   FaLocationDot,
   FaPhone,
@@ -77,12 +78,12 @@ export default function Footer() {
             <ul className="mt-5 space-y-3">
               {navLinks.map((link) => (
                 <li key={link.id}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.to}
                     className="text-sm text-white/65 transition-colors hover:text-brand-500"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -97,12 +98,12 @@ export default function Footer() {
             <ul className="mt-5 space-y-3">
               {services.map((service) => (
                 <li key={service.id}>
-                  <a
-                    href="#services"
+                  <Link
+                    to="/services"
                     className="text-sm text-white/65 transition-colors hover:text-brand-500"
                   >
                     {service.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -167,10 +168,13 @@ export default function Footer() {
           </p>
 
           <div className="flex items-center gap-5">
-            <a href="#home" className="text-xs text-white/50 hover:text-brand-500">
+            {/* TODO: Privacy aur Terms ke asli page abhi nahi bane.
+                Bante hi inhe <Link to="/privacy-policy"> bana dena.
+                Tab tak href="#" - kam se kam kahin galat jagah nahi le jaate. */}
+            <a href="#" className="text-xs text-white/50 hover:text-brand-500">
               Privacy Policy
             </a>
-            <a href="#home" className="text-xs text-white/50 hover:text-brand-500">
+            <a href="#" className="text-xs text-white/50 hover:text-brand-500">
               Terms &amp; Conditions
             </a>
 

@@ -1,0 +1,15 @@
+# ============================================================
+# SPA REWRITE RULE  (Netlify / Cloudflare Pages)
+#
+# SAMASYA: BrowserRouter ke saath /fleet ek asli file nahi hai -
+# wo sirf browser ke andar React banata hai. Agar koi seedha
+# www.manvitravels.com/fleet khole ya page refresh kare, to server
+# "fleet" naam ki file dhoondhta hai, milti nahi, aur 404 de deta hai.
+#
+# HAL: neeche wali line kehti hai - "koi bhi path aaye, index.html
+# hi bhej do (status 200), aage React khud sambhal lega".
+#
+# Vercel par iski zaroorat nahi (wo apne aap karta hai).
+# Apache par .htaccess me RewriteRule likhni padegi.
+# ============================================================
+/*    /index.html   200

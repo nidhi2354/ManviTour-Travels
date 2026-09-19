@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa6";
 import SectionHeading from "../common/SectionHeading";
+import Button from "../common/Button";
 import Icon from "../common/Icon";
 import { whyChooseUs } from "../../data/homeContent";
 import { siteConfig } from "../../data/siteConfig";
@@ -25,7 +28,7 @@ import { siteConfig } from "../../data/siteConfig";
    jisse context nahi khota.
    ============================================================ */
 
-export default function WhyChooseUs() {
+export default function WhyChooseUs({ isPage = false }) {
   return (
     <section id="why-us" className="section-y bg-brand-50/40">
       <div className="container-x">
@@ -33,6 +36,8 @@ export default function WhyChooseUs() {
           {/* ---------- BAAYI TARAF: heading + proof ---------- */}
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-28">
+              {/* Heading har jagah dikhti hai - ye section apni alag
+                  baat kehta hai, PageHeader ki baat dohraata nahi. */}
               <SectionHeading
                 align="left"
                 eyebrow="Why Choose Us"
@@ -43,7 +48,14 @@ export default function WhyChooseUs() {
               {/* ---- GST PROOF CARD ----
                   Purpose: "GST Registered" sirf keh dena kaafi nahi.
                   Asli number dikhane se claim verify ho jaata hai.
-                  Ye document (GST certificate) se liya gaya hai. */}
+                  Ye document (GST certificate) se liya gaya hai.
+
+                  isPage (yaani /about) par ye card CHHUPA dete hain -
+                  us page par GSTIN pehle hi do jagah aa chuka hai
+                  (OurStory ka badge aur OwnerMessage ki legal line).
+                  Ek hi number teen baar = page bharosa nahi, shak
+                  paida karta hai. */}
+              {!isPage && (
               <div className="mt-10 rounded-2xl border-2 border-dashed border-brand-500/40 bg-white p-6">
                 <p className="font-display text-xs font-bold uppercase tracking-wider text-brand-700">
                   Government Registered Business
@@ -80,6 +92,22 @@ export default function WhyChooseUs() {
                   Proper GST invoices are available for corporate clients.
                 </p>
               </div>
+              )}
+
+              {/* ---------- HOME SE ABOUT PAGE KA RAASTA ----------
+                  "Why Us" ka apna koi page nahi hai - ye About page ka
+                  hissa hai. Isliye ye button /about par le jaata hai. */}
+              {!isPage && (
+                <Button
+                  as={Link}
+                  to="/about"
+                  variant="outline"
+                  size="md"
+                  className="mt-6"
+                >
+                  More About Us <FaArrowRight className="text-xs" />
+                </Button>
+              )}
             </div>
           </div>
 

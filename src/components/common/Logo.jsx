@@ -2,23 +2,17 @@ import { siteConfig } from "../../data/siteConfig";
 
 /* ============================================================
    COMPONENT: <Logo />
-   PURPOSE: Brand ki pehchaan. Navbar, Footer aur loading screen -
-            teeno jagah yahi component use hoga, isliye ek hi file me.
+  
 
-   Ye client ke visiting card wale logo ka SVG version hai
-   (suraj + kaali gaadi + speed lines). SVG isliye:
-     - kisi bhi size par blur nahi hoga (retina/4K safe)
-     - file size sirf ~2KB, page fast load hoga
-     - color code se hi badal sakte hain
+   
+   
 
    AGAR CLIENT ASLI LOGO FILE (PNG/SVG) DE DE:
      1. file ko  src/assets/logo.png  me rakhein
      2. upar likhein:  import logoImg from "../../assets/logo.png";
      3. neeche <svg>...</svg> ki jagah:  <img src={logoImg} alt="Manvi Tour & Travels" className="h-12 w-auto" />
 
-   PROPS:
-     variant = "dark"  -> text kaala  (white background ke liye, jaise navbar)
-     variant = "light" -> text safed  (dark background ke liye, jaise footer)
+   
    ============================================================ */
 
 export default function Logo({ variant = "dark", className = "" }) {
@@ -75,9 +69,8 @@ export default function Logo({ variant = "dark", className = "" }) {
       {/* ---------- LOGO TEXT ---------- */}
       <div className="leading-none">
         <span
-          className={`block font-display text-xl font-extrabold tracking-tight sm:text-2xl ${
-            isLight ? "text-white" : "text-ink-900"
-          }`}
+          className={`block font-display text-xl font-extrabold tracking-tight sm:text-2xl ${isLight ? "text-white" : "text-ink-900"
+            }`}
         >
           {siteConfig.brandName}
         </span>
